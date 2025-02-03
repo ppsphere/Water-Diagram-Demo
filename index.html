@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered GIF</title>
+    <style>
+        /* Reset body styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Full height of the screen */
+            background-color: white; /* Optional background color */
+        }
+
+        .gif-container {
+            animation: slowGIF 10s linear infinite; /* Adjust duration */
+        }
+
+        @keyframes slowGIF {
+            from {
+                transform: scale(1);
+            }
+            to {
+                transform: scale(1); /* Keeps the GIF static while slowing playback */
+            }
+        }
+
+        /* Container for GIF */
+        .gif-container {
+            position: relative;
+            display: inline-block;
+        }
+
+
+        /* Style for the GIF */
+        .gif {
+            max-width: 100%; /* Makes it responsive */
+            max-height: 100%; /* Ensures it doesn't overflow */
+            display: block; /* Removes any inline spacing */
+        }
+
+         /* Clickable Symbol (icon) */
+        .clickable-symbol {
+            position: absolute;
+            top: 10%; /* Adjust position */
+            right: 10%;
+            color: #f4f4f4;
+            padding: 4px; /* Reduce padding */
+            border-radius: 50%;
+            font-size: 14px; /* Reduce font size */
+            cursor: pointer;
+            width: 30px; /* Set fixed size */
+            height: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s ease-in-out;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        /* Hover effect */
+        .clickable-symbol:hover {
+            transform: scale(1.1); /* Slight enlargement on hover */
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Tooltip styling */
+        .tooltip {
+            position: absolute;
+            top: 0;
+            right: 50%;
+            transform: translateX(50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            white-space: nowrap;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        /* Show tooltip on hover */
+        .clickable-symbol:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Centered GIF -->
+    <img src="assets/Blue Pink Cute Illustration Affirmation Poster.gif" alt="Blue Pink Cute Illustration Poster" class="gif">
+
+     <!-- Clickable Symbol -->
+     <div class="clickable-symbol" onclick="openNewTab()">
+        <img src="assets/Blue_Pink_Cute_Illustration_Affirmation_Poster-removebg-preview.png" alt="Click for more info" class="clickable-icon" onclick="openNewTab()"
+        width="80" height="80">
+        <div class="tooltip">Click for more info!</div>
+     </div>
+
+    <script>
+        function openNewTab() {
+            window.open("https://example.com", "_blank"); // Change the URL as needed
+        }
+    </script>
+
+</div>
+</body>
+</html>
