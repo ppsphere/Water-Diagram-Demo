@@ -23,25 +23,30 @@
   <canvas id="waterChart" width="800" height="400"></canvas>
 
   <script>
+    const labels = ['ภาคเหนือ', 'ภาคตะวันออกเฉียงเหนือ', 'ภาคกลาง', 'ภาคตะวันตก', 'ภาคตะวันออก'];
+    const usableWater = [7526.96, 1867.43, 346.11, 5185.13, 433.24];
+    const storedWater = [14271.61, 3457.95, 406.11, 18462.13, 527.57];
+    const additionalCapacity = [10553.61, 4910.52, 1012.89, 8142.87, 987.18];
+
     const ctx = document.getElementById('waterChart').getContext('2d');
     const waterChart = new Chart(ctx, {
       type: 'bar',
       data: {
-        labels: ['ภาคเหนือ', 'ภาคตะวันออกเฉียงเหนือ', 'ภาคกลาง', 'ภาคตะวันตก', 'ภาคตะวันออก', 'ภาคใต้'],
+        labels: labels,
         datasets: [
           {
             label: 'น้ำใช้การ',
-            data: [3000, 1000, 300, 2500, 400, 900],
+            data: usableWater,
             backgroundColor: '#0057ff'
           },
           {
             label: 'ปริมาณน้ำเก็บกัก',
-            data: [10000, 3000, 600, 14000, 500, 2000],
+            data: storedWater,
             backgroundColor: '#5ba5f7'
           },
           {
             label: 'น้ำรับได้อีก',
-            data: [8000, 3000, 400, 12000, 600, 1600],
+            data: additionalCapacity,
             backgroundColor: '#c8e0f8'
           }
         ]
