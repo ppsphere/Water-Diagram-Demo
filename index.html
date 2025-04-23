@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>ปริมาณน้ำอ่างเก็บน้ำขนาดใหญ่</title>
+  <title>ปริมาณน้ำอ่างเก็บน้ำ</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     body {
@@ -19,76 +19,65 @@
 </head>
 <body>
   <h2>ปริมาณน้ำอ่างเก็บน้ำขนาดใหญ่</h2>
-  <p>ประจำวันที่ 23/04/2568 (ล้าน ลบ.ม.)</p>
+  <p>โหลดข้อมูลจาก Google Sheets แบบเรียลไทม์</p>
   <canvas id="waterChart" width="800" height="400"></canvas>
 
   <script>
-    const labels = ['ภาคเหนือ', 'ภาคตะวันออกเฉียงเหนือ', 'ภาคกลาง', 'ภาคตะวันตก', 'ภาคตะวันออก'];
-    const usableWater = [7526.96, 1867.43, 346.11, 5185.13, 433.24];
-    const storedWater = [14271.61, 3457.95, 406.11, 18462.13, 527.57];
-    const additionalCapacity = [10553.61, 4910.52, 1012.89, 8142.87, 987.18];
+    let url = 'https://api.sheety.co/2c432d6e3d2d1ef7fe0a3319849cd30e/reservoirData23042568/reservoirData';
 
-    const ctx = document.getElementById('waterChart').getContext('2d');
-    const waterChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: labels,
-        datasets: [
-          {
-            label: 'น้ำใช้การ',
-            data: usableWater,
-            backgroundColor: '#0057ff'
+    fetch(url)
+      .then((response) => response.json())
+      .then(json => {
+        const data = json.reservoirData;
+
+        const labels = data.map(row => row["ภูมิภาคกลุ่มเขื่อน"]);
+        const usableWater = data.map(row => +row["น้ำใช้การ"]);
+        const storedWater = data.map(row => +row["ปริมาณน้ำเก็บกัก"]);
+        const extraCapacity = data.map(row => +row["น้ำรับได้อีก"]);
+
+        const ctx = document.getElementById('waterChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: 'น้ำใช้การ',
+                data: usableWater,
+                backgroundColor: '#0057ff'
+              },
+              {
+                label: 'ปริมาณน้ำเก็บกัก',
+                data: storedWater,
+                backgroundColor: '#5ba5f7'
+              },
+              {
+                label: 'น้ำรับได้อีก',
+                data: extraCapacity,
+                backgroundColor: '#c8e0f8'
+              }
+            ]
           },
-          {
-            label: 'ปริมาณน้ำเก็บกัก',
-            data: storedWater,
-            backgroundColor: '#5ba5f7'
-          },
-          {
-            label: 'น้ำรับได้อีก',
-            data: additionalCapacity,
-            backgroundColor: '#c8e0f8'
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            labels: {
-              color: 'white'
-            }
-          },
-          title: {
-            display: false
-          }
-        },
-        scales: {
-          x: {
-            stacked: true,
-            ticks: {
-              color: 'white'
+          options: {
+            responsive: true,
+            scales: {
+              x: {
+                stacked: true,
+                ticks: { color: 'white' },
+                grid: { color: 'rgba(255,255,255,0.2)' }
+              },
+              y: {
+                stacked: true,
+                ticks: { color: 'white' },
+                grid: { color: 'rgba(255,255,255,0.2)' }
+              }
             },
-            grid: {
-              color: 'rgba(255,255,255,0.2)',
-              borderColor: 'white',
-              borderWidth: 1
-            }
-          },
-          y: {
-            stacked: true,
-            ticks: {
-              color: 'white'
-            },
-            grid: {
-              color: 'rgba(255,255,255,0.2)',
-              borderColor: 'white',
-              borderWidth: 1
+            plugins: {
+              legend: { labels: { color: 'white' } }
             }
           }
-        }
-      }
-    });
+        });
+      });
   </script>
 </body>
 </html>
