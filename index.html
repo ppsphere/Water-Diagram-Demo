@@ -1,131 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Centered GIF</title>
-    <style>
-        /* Reset body styles */
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh; /* Full height of the screen */
-            background-color: white; /* Optional background color */
-        }
-
-        .gif-container {
-            animation: slowGIF 10s linear infinite; /* Adjust duration */
-        }
-
-        @keyframes slowGIF {
-            from {
-                transform: scale(1);
-            }
-            to {
-                transform: scale(1); /* Keeps the GIF static while slowing playback */
-            }
-        }
-
-        /* Container for GIF */
-        .gif-container {
-            position: relative;
-            display: inline-block;
-        }
-
-
-        /* Style for the GIF */
-        .gif {
-            max-width: 100%; /* Makes it responsive */
-            max-height: 100%; /* Ensures it doesn't overflow */
-            display: block; /* Removes any inline spacing */
-        }
-
-         /* Clickable Symbol (icon) */
-        .clickable-symbol {
-            position: absolute;
-            top: 10%; /* Adjust position */
-            right: 10%;
-            color: #f4f4f4;
-            padding: 4px; /* Reduce padding */
-            border-radius: 50%;
-            font-size: 14px; /* Reduce font size */
-            cursor: pointer;
-            width: 30px; /* Set fixed size */
-            height: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s ease-in-out;
-            animation: pulse 1.5s infinite ease-in-out;
-        }
-
-        /* Hover effect */
-        .clickable-symbol:hover {
-            transform: scale(1.1); /* Slight enlargement on hover */
-        }
-        
-        /* Pulse Animation */
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.1);
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-        }
-
-        /* Tooltip styling */
-        .tooltip {
-            position: absolute;
-            top: 0;
-            right: 50%;
-            transform: translateX(50%);
-            background-color: rgba(0, 0, 0, 0.7);
-            color: #fff;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            white-space: nowrap;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out;
-        }
-
-        /* Show tooltip on hover */
-        .clickable-symbol:hover .tooltip {
-            visibility: visible;
-            opacity: 1;
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <title>ปริมาณน้ำอ่างเก็บน้ำขนาดใหญ่</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      background-color: #1b1b3a;
+      color: white;
+      font-family: sans-serif;
+      padding: 20px;
+    }
+    canvas {
+      background-color: #1b1b3a;
+      border-radius: 10px;
+    }
+  </style>
 </head>
 <body>
-    <!-- Centered GIF -->
-    <img src="assets/Blue Pink Cute Illustration Affirmation Poster.gif" alt="Blue Pink Cute Illustration Poster" class="gif">
+  <h2>ปริมาณน้ำอ่างเก็บน้ำขนาดใหญ่</h2>
+  <p>ประจำวันที่ 23/04/2568 (ล้าน ลบ.ม.)</p>
+  <canvas id="waterChart" width="800" height="400"></canvas>
 
-     <!-- Clickable Symbol -->
-     <div class="clickable-symbol" onclick="openNewTab()">
-        <img src="assets/Blue_Pink_Cute_Illustration_Affirmation_Poster-removebg-preview.png" alt="Click for more info" class="clickable-icon" onclick="openNewTab()"
-        width="80" height="80">
-        <div class="tooltip">Click for more info!</div>
-     </div>
-
-    <script>
-        function openNewTab() {
-            window.open("https://app.rid.go.th/reservoir/api/reservoir/public"); // Change the URL as needed
+  <script>
+    const ctx = document.getElementById('waterChart').getContext('2d');
+    const waterChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['ภาคเหนือ', 'ภาคตะวันออกเฉียงเหนือ', 'ภาคกลาง', 'ภาคตะวันตก', 'ภาคตะวันออก', 'ภาคใต้'],
+        datasets: [
+          {
+            label: 'น้ำใช้การ',
+            data: [3000, 1000, 300, 2500, 400, 900],
+            backgroundColor: '#0057ff'
+          },
+          {
+            label: 'ปริมาณน้ำเก็บกัก',
+            data: [10000, 3000, 600, 14000, 500, 2000],
+            backgroundColor: '#5ba5f7'
+          },
+          {
+            label: 'น้ำรับได้อีก',
+            data: [8000, 3000, 400, 12000, 600, 1600],
+            backgroundColor: '#c8e0f8'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            labels: {
+              color: 'white'
+            }
+          },
+          title: {
+            display: false
+          }
+        },
+        scales: {
+          x: {
+            stacked: true,
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: 'rgba(255,255,255,0.2)',
+              borderColor: 'white',
+              borderWidth: 1
+            }
+          },
+          y: {
+            stacked: true,
+            ticks: {
+              color: 'white'
+            },
+            grid: {
+              color: 'rgba(255,255,255,0.2)',
+              borderColor: 'white',
+              borderWidth: 1
+            }
+          }
         }
-    </script>
-
-</div>
+      }
+    });
+  </script>
 </body>
 </html>
-
