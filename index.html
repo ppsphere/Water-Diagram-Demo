@@ -31,8 +31,9 @@
         const data = json.reservoirData;
 
         const labels = data.map(row => row["ภูมิภาคกลุ่มเขื่อน"]);
-        const usableWater = data.map(row => +row["น้ำใช้การ"]);
         const storedWater = data.map(row => +row["ปริมาณน้ำเก็บกัก"]);
+        const usableWater = data.map(row => +row["น้ำใช้การ"]);
+        const remainingStoredWater = storedWater.map((value, index) => value - usableWater[index]);
         const extraCapacity = data.map(row => +row["น้ำรับได้อีก"]);
 
         const ctx = document.getElementById('waterChart').getContext('2d');
@@ -44,17 +45,29 @@
               {
                 label: 'น้ำใช้การ',
                 data: usableWater,
-                backgroundColor: '#0057ff'
+                backgroundColor: '#0057ff',
+                stack: 'stored'
               },
               {
                 label: 'ปริมาณน้ำเก็บกัก',
-                data: storedWater,
-                backgroundColor: '#5ba5f7'
+                data: remainingStoredWater,
+                backgroundColor: '#5ba5f7',
+                stack: 'stored',
+                tooltip: {
+                  callbacks: {
+                    label: function(context) {
+                      const index = context.dataIndex;
+                      const total = storedWater[index];
+                      return 'ปริมาณน้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
+                    }
+                  }
+                }
               },
               {
                 label: 'น้ำรับได้อีก',
                 data: extraCapacity,
-                backgroundColor: '#c8e0f8'
+                backgroundColor: '#c8e0f8',
+                stack: 'stored'
               }
             ]
           },
@@ -73,7 +86,21 @@
               }
             },
             plugins: {
-              legend: { labels: { color: 'white' } }
+              legend: { labels: { color: 'white' } },
+              tooltip: {
+                callbacks: {
+                  label: function(context) {
+                    const index = context.dataIndex;
+                    const datasetLabel = context.dataset.label;
+                    if (datasetLabel === 'น้ำที่เก็บไว้แต่ยังไม่ใช้') {
+                      const total = storedWater[index];
+                      return 'ปริมาณน้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
+                    } else {
+                      return datasetLabel + ': ' + context.formattedValue + ' ล้าน ลบ.ม.';
+                    }
+                  }
+                }
+              }
             }
           }
         });
