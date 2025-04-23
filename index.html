@@ -23,18 +23,21 @@
   <canvas id="waterChart" width="800" height="400"></canvas>
 
   <script>
-    let url = 'https://api.sheety.co/2c432d6e3d2d1ef7fe0a3319849cd30e/reservoirData23042568/reservoirData';
+    let url = 'https://api.sheety.co/2c432d6e3d2d1ef7fe0a3319849cd30e/ฺbigReservoirData/126Fbc2B170E9B3Fdc1Afe167B651168F6D9D68FEsged7Da';
 
     fetch(url)
       .then((response) => response.json())
       .then(json => {
-        const data = json.reservoirData;
+        const data = json["126Fbc2B170E9B3Fdc1Afe167B651168F6D9D68FEsged7Da"];
+        console.log(data);
 
-        const labels = data.map(row => row["ภูมิภาคกลุ่มเขื่อน"]);
-        const storedWater = data.map(row => +row["ปริมาณน้ำเก็บกัก"]);
+        const labels = data.map(row => row["category"]);
+        const storedWater = data.map(row => +row["น้ำเก็บกัก"]);
+        const capacity = data.map(row => +row["ความจุอ่าง"]);
         const usableWater = data.map(row => +row["น้ำใช้การ"]);
         const remainingStoredWater = storedWater.map((value, index) => value - usableWater[index]);
-        const extraCapacity = data.map(row => +row["น้ำรับได้อีก"]);
+        const extraCapacity = capacity.map((cap, index) => cap - storedWater[index]);
+
 
         const ctx = document.getElementById('waterChart').getContext('2d');
         new Chart(ctx, {
@@ -49,7 +52,7 @@
                 stack: 'stored'
               },
               {
-                label: 'ปริมาณน้ำเก็บกัก',
+                label: 'น้ำเก็บกัก',
                 data: remainingStoredWater,
                 backgroundColor: '#5ba5f7',
                 stack: 'stored',
@@ -58,7 +61,7 @@
                     label: function(context) {
                       const index = context.dataIndex;
                       const total = storedWater[index];
-                      return 'ปริมาณน้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
+                      return 'น้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
                     }
                   }
                 }
@@ -94,7 +97,7 @@
                     const datasetLabel = context.dataset.label;
                     if (datasetLabel === 'น้ำที่เก็บไว้แต่ยังไม่ใช้') {
                       const total = storedWater[index];
-                      return 'ปริมาณน้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
+                      return 'น้ำเก็บกัก: ' + total.toLocaleString() + ' ล้าน ลบ.ม.';
                     } else {
                       return datasetLabel + ': ' + context.formattedValue + ' ล้าน ลบ.ม.';
                     }
